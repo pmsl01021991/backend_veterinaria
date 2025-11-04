@@ -1,18 +1,17 @@
 import express from "express";
 import cors from "cors";
-import { create, router as jsonRouter } from "json-server";
+import pkg from "json-server";  // ✅ Importación compatible con CommonJS
+const { router, defaults } = pkg;
 
 const server = express();
-const router = jsonRouter("db.json"); // base de datos local
-const middlewares = create();
+const middlewares = defaults();
 
 server.use(cors());
 server.use(express.json());
-server.use("/api", router);
+server.use(middlewares);
+server.use("/api", router("db.json"));
 
-// 🔹 Puerto asignado por Render o local
-const port = process.env.PORT || 3000;
-
-server.listen(port, () => {
-  console.log(`Servidor JSON corriendo en el puerto ${port}`);
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => {
+  console.log(`✅ JSON Server funcionando en Render en el puerto ${PORT}`);
 });
