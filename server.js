@@ -1,33 +1,32 @@
-import express from "express";
+// ✅ Importación compatible con CommonJS
+import jsonServer from "json-server";
 import cors from "cors";
-import pkg from "json-server"; // compatibilidad con CommonJS
-import path from "path";
-import { fileURLToPath } from "url";
 
-const { router: jsonRouter, defaults } = pkg;
+const server = jsonServer.create();
+const router = jsonServer.router("db.json");
+const middlewares = jsonServer.defaults();
 
-// Para obtener ruta absoluta del archivo db.json
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const dbFile = path.join(__dirname, "db.json");
-
-const server = express();
-const middlewares = defaults();
-
-// ✅ CORS CONFIG COMPLETA
+// ✅ Habilitar CORS globalmente
 server.use(
   cors({
-    origin: ["http://localhost:4200", "https://tu-dominio-frontend.onrender.com"],
+    origin: ["http://localhost:4200", "https://backend-veterinaria1.onrender.com", "https://backend-veterinaria1.onrender.com", "https://tu-frontend-en-render.onrender.com"],
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     allowedHeaders: ["Content-Type"],
   })
 );
 
-server.use(express.json());
-server.use(middlewares);
-server.use("/usuarios", jsonRouter(dbFile)); // o /api si así usas en frontend
+// ✅ Middleware para parsear JSON
+server.use(jsonServer.bodyParser);
 
+// ✅ Agregar tus middlewares por defecto
+server.use(middlewares);
+
+// ✅ Prefijo opcional si quieres
+// server.use('/api', router);
+server.use(router);
+
+// ✅ Iniciar servidor
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-  console.log(`✅ Servidor backend veterinaria en puerto ${PORT}`);
+  console.log(`🚀 Backend veterinaria corriendo en puerto ${PORT}`);
 });
