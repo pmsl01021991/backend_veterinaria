@@ -9,11 +9,15 @@ const middlewares = jsonServer.defaults();
 // ✅ Habilitar CORS globalmente
 server.use(
   cors({
-    origin: ["http://localhost:4200"], // 🟢 tu Angular local
+    origin: [
+      "http://localhost:4200", // 🟢 tu Angular local
+      "https://veterinaria-interfaces-3.onrender.com" // 🟣 tu frontend en Render
+    ],
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     allowedHeaders: ["Content-Type"],
   })
 );
+
 
 
 // ✅ Middleware para parsear JSON
