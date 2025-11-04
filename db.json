@@ -1,0 +1,12 @@
+{
+  "usuarios": [
+    {
+      "id": 1,
+      "username": "admin@gmail.com",
+      "password": "pmsl123",
+      "rol": "admin"
+    }
+  ],
+  "mascotas": [],
+  "citas": []
+}
