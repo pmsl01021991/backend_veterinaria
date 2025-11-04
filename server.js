@@ -18,16 +18,25 @@ server.use(
   })
 );
 
-
-
 // ✅ Middleware para parsear JSON
 server.use(jsonServer.bodyParser);
 
-// ✅ Agregar tus middlewares por defecto
+// ✅ Middleware para generar IDs secuenciales solo en mascotas
+server.post("/mascotas", (req, res, next) => {
+  const db = router.db; // acceso a la base db.json
+  const mascotas = db.get("mascotas").value();
+
+  // si hay registros, sumamos 1 al último ID; si no, empezamos en 1
+  const nuevoId = mascotas.length > 0 ? mascotas[mascotas.length - 1].id + 1 : 1;
+
+  req.body.id = nuevoId;
+  next(); // continuar al manejador de json-server
+});
+
+// ✅ Middlewares por defecto
 server.use(middlewares);
 
-// ✅ Prefijo opcional si quieres
-// server.use('/api', router);
+// ✅ Rutas de la API
 server.use(router);
 
 // ✅ Iniciar servidor
